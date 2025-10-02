@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from rest_framework import permissions, viewsets
 
-# Create your views here.
+from .models import TimezoneTest
+from .serializers import TimezoneTestSerializer
+
+
+class TimezoneTestViewSet(viewsets.ModelViewSet):
+    queryset = TimezoneTest.objects.all()
+    serializer_class = TimezoneTestSerializer
+    permission_classes = [permissions.IsAuthenticated]
