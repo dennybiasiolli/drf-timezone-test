@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'drf_timezone_test.middlewares.TimezoneMiddleware'
 ]
 
 ROOT_URLCONF = 'drf_timezone_test.urls'
