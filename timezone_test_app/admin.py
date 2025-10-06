@@ -4,4 +4,5 @@ from .models import TimezoneTest
 
 @admin.register(TimezoneTest)
 class TimezoneTestAdmin(admin.ModelAdmin):
-    list_display = ('value_str', 'value_dt', 'created_at', 'modified_at')
+    list_display = ('value_str', 'value_dt', 'comment', 'created_at', 'modified_at')
+    ordering = ('value_dt',)

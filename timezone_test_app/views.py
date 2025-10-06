@@ -1,4 +1,5 @@
-from rest_framework import permissions, viewsets
+from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter
 
 from .models import TimezoneTest
 from .serializers import TimezoneTestSerializer
@@ -7,4 +8,6 @@ from .serializers import TimezoneTestSerializer
 class TimezoneTestViewSet(viewsets.ModelViewSet):
     queryset = TimezoneTest.objects.all()
     serializer_class = TimezoneTestSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [OrderingFilter]
+    ordering = ['value_dt']
+    # permission_classes = [permissions.IsAuthenticated]
