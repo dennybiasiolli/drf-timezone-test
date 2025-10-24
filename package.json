@@ -1,0 +1,10 @@
+{
+  "name": "drf-timezone-test",
+  "version": "1.0.0",
+  "description": "Add your description here",
+  "author": "Denny Biasiolli",
+  "license": "ISC",
+  "dependencies": {
+    "luxon": "^3.7.2"
+  }
+}
