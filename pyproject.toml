@@ -12,3 +12,8 @@ dependencies = [
     "psycopg>=3.2.10",
     "tzlocal>=5.3.1",
 ]
+
+[dependency-groups]
+dev = [
+    "black>=25.9.0",
+]

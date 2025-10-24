@@ -8,7 +8,7 @@ class TimezoneMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        tzname = request.headers.get('X-Timezone')
+        tzname = request.headers.get("X-Timezone")
         if tzname:
             try:
                 timezone.activate(zoneinfo.ZoneInfo(tzname))

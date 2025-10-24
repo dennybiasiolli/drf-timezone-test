@@ -9,12 +9,12 @@ const { DateTime } = require("luxon");
  * @returns {[string, string]} - An array containing the start and end date of the quarter in ISO format.
  */
 function quarterRangeInTimezone(year, quarter, timezone) {
-    const startOfQuarter = DateTime.fromObject(
-        { year: year, month: ((quarter - 1) * 3) + 1, day: 1 },
-        { zone: timezone }
-    );
-    const endOfQuarter = startOfQuarter.endOf("quarter");
-    return [startOfQuarter.toISO(), endOfQuarter.toISO()];
+  const startOfQuarter = DateTime.fromObject(
+    { year: year, month: (quarter - 1) * 3 + 1, day: 1 },
+    { zone: timezone },
+  );
+  const endOfQuarter = startOfQuarter.endOf("quarter");
+  return [startOfQuarter.toISO(), endOfQuarter.toISO()];
 }
 
 quarterRangeInTimezone(2025, 1, "America/New_York");

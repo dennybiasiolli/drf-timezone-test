@@ -5,8 +5,8 @@ from .views import TimezoneTestViewSet
 
 
 router = routers.DefaultRouter()
-router.register(r'timezone-tests', TimezoneTestViewSet)
+router.register(r"timezone-tests", TimezoneTestViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]

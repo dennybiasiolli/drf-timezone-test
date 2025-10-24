@@ -9,7 +9,6 @@ A timestamp is a representation of a specific point in time.
 
 In the technical world, a timestamp is independent of timezones and it's usually represented as the number of seconds (or milliseconds/microseconds) since a specific epoch (e.g., January 1, 1970, 00:00:00 UTC for Unix timestamps).
 
-
 #### Representation of a timestamp
 
 A timestamp is typically represented as a numeric value, which is the number of seconds (or milliseconds) since the epoch. This representation is independent of timezones.
@@ -23,8 +22,6 @@ The ISO 8601 standard defines a textual representation of date and time, which c
 https://en.wikipedia.org/wiki/ISO_8601
 
 For example, `2025-10-05T14:48:00Z` represents October 5, 2025, at 14:48 UTC (the "Z" indicates UTC timezone), while `2025-10-05T10:48:00-04:00` represents the same moment in time in New York (Eastern Daylight Time).
-
-
 
 ## Timestamp representation in programming languages
 
@@ -69,10 +66,10 @@ print(now.timestamp())
 It's important to note that while a timestamp itself does not contain timezone information,
 it can be associated with a specific timezone when it is displayed or interpreted.
 
-
 #### Python datetime with timezone
 
 In Python, a `datetime` object can be
+
 - "naive" (without timezone information)
 - "aware" (with timezone information)
 
@@ -119,7 +116,6 @@ In JavaScript, you can get the local timezone name of the browser with:
 Intl.DateTimeFormat().resolvedOptions().timeZone;
 ```
 
-
 ## PostgreSQL timestamptz
 
 In PostgreSQL you can handle timestamps with timezone with the `timestamp with time zone` (aka `timestamptz`) type.
@@ -135,26 +131,22 @@ They have a range from 4713 BC to 294276 AD with 1 microsecond resolution.
 
 ---
 
-
 Let's create a sample table to play with timezones:
 
 [source](./scripts/01-create-sql-table.sql)
 
-
-Let's say we have people in New York, Rome, Calcutta and Tokyo, and everyone wants to store
-the start and end of Q1 2025 in their local timezone.
+Let's say we have people in New York, Rome, Calcutta and Tokyo, and everyone wants to store the start and end of Q1 2025 in their local timezone.
 
 In a browser, using JavaScript and the `luxon` library, we can get the correct ISO string with timezone offset for each city like this:
 
-[source](./scripts/02-get-js-date-ranges.js)
+[source (py)](./scripts/02-get-py-date-ranges.py)
+[source (js)](./scripts/02-get-js-date-ranges.js)
 
 Notice that the timezone offsets are different because of Daylight Saving Time (DST), but all of this is handled automatically.
-
 
 Now we can insert the values in the database:
 
 [source](./scripts/03-insert-db-values.sql)
-
 
 If we query the table, PostgreSQL will convert the `timestamptz` value to the local timezone of the database (Europe/Rome in my case).
 
@@ -164,7 +156,6 @@ select * from test_timezone order by value_dt;
 
 You may notice that the `value_dt` column values are different from the `value_str` column values,
 because PostgreSQL converted the timestamps to the local timezone of the database (Europe/Rome).
-
 
 #### Querying ranges of dates with timestamptz
 
@@ -187,10 +178,9 @@ But what if you are connecting from New York and you want to get the records bet
 
 You could specify the timezone offset in the query:
 
-
 ```sql
 -- select dates between start and end of Q1 2025 in New York
-select * from test_timezone where value_dt between '2025-01-01T00:00:00.000-05:00' and '2025-03-31T23:59:59.999-04:00' order by value_dt;
+select * from test_timezone where value_dt between '2025-01-01T00:00:00-05:00' and '2025-03-31T23:59:59.999999-04:00' order by value_dt;
 ```
 
 #### Checking the current timezone
@@ -216,7 +206,6 @@ Where is the timezone of the database configured?
 5. For a single session, with `SET TIMEZONE TO 'Europe/Rome';`
 6. For a single transaction, with `SET LOCAL TIMEZONE TO 'Europe/Rome';` within a transaction block
 
-
 For example, if you want to get the records between the start and end of Q1 2025 in New York timezone, you can set the timezone for the transaction like this:
 
 ```sql
@@ -233,7 +222,6 @@ end;
 
 This way you can get results in your desired timezone without changing the database's timezone permanently.
 
-
 ## Django DateTimeField
 
 In Django you can use the `DateTimeField` to store timestamps with timezone.
@@ -245,7 +233,6 @@ Django will assume the datetime is in the timezone specified in the `TIME_ZONE` 
 Note that to enable timezone support in Django, you need to set `USE_TZ = True` in your settings (it's `True` by default).
 
 Django will store all datetimes in UTC in the database and will use timezone-aware datetimes throughout the application.
-
 
 What does this means for users in different timezones?
 When a user in New York creates a datetime object without timezone information (a naive datetime), Django will assume that the datetime is in the timezone specified in `TIME_ZONE` (UTC by default) and will convert it to UTC before storing it in the database.
@@ -260,34 +247,40 @@ Let's try with an example, similar to the one we created for PostgreSQL.
 
 [source](./scripts/04-django-bulk-create.py)
 
+Open http://localhost:8001/admin/timezone_test_app/timezonetest/
+
+Notice that the datetimes are displayed in the timezone specified in `TIME_ZONE` (UTC by default).
+
+Django will automatically convert the datetimes to the appropriate timezone when displaying them in the admin interface.
+
+At the database level, you can see the stored values with:
+
 ```sql
 select * from timezone_test_app_timezonetest order by value_dt;
- id |           value_str           |          value_dt          |          comment
-----+-------------------------------+----------------------------+---------------------------
-  5 | 2025-01-01T00:00:00.000+09:00 | 2024-12-31 16:00:00+01     | start of Q1 2025 in Tokyo
-  3 | 2025-01-01T00:00:00.000+01:00 | 2025-01-01 00:00:00+01     | start of Q1 2025 in Rome
-  1 | 2025-01-01T00:00:00.000-05:00 | 2025-01-01 06:00:00+01     | start of Q1 2025 in NY
-  6 | 2025-03-31T23:59:59.999+09:00 | 2025-03-31 16:59:59.999+02 | end of Q1 2025 in Tokyo
-  4 | 2025-03-31T23:59:59.999+02:00 | 2025-03-31 23:59:59.999+02 | end of Q1 2025 in Rome
-  2 | 2025-03-31T23:59:59.999-04:00 | 2025-04-01 05:59:59.999+02 | end of Q1 2025 in NY
-(6 rows)
 ```
+
+Of course they are stored in UTC, but you will see them with the timezone set in PostgreSQL (Europe/Rome in my case).
+
+Now let's try to query the records between the start and end of Q1 2025.
 
 ```py
 # python manage.py shell
-
+from datetime import datetime
 from timezone_test_app.models import TimezoneTest
 
+TimezoneTest.objects.filter(value_dt__gte=datetime(2025, 1, 1), value_dt__lt=datetime(2025, 4, 1)).order_by("value_dt")
+# or
 TimezoneTest.objects.filter(value_dt__gte="2025-01-01", value_dt__lt="2025-04-01").order_by("value_dt")
 # RuntimeWarning: DateTimeField TimezoneTest.value_dt received a naive datetime (2025-01-01 00:00:00) while time zone support is active.
 # RuntimeWarning: DateTimeField TimezoneTest.value_dt received a naive datetime (2025-04-01 00:00:00) while time zone support is active.
 # <QuerySet [<TimezoneTest: start of Q1 2025 in NY>, <TimezoneTest: end of Q1 2025 in Tokyo>, <TimezoneTest: end of Q1 2025 in Rome>]>
 ```
 
-This converts the naive datetimes to the timezone in settings.TIME_ZONE (UTC by default)
+Django gives a warning because we are using naive datetimes while timezone support is active.
+To avoid the warning, we can specify the timezone offset in the query:
 
 ```py
-TimezoneTest.objects.filter(value_dt__gte="2025-01-01T00:00:00.000-05:00", value_dt__lte="2025-03-31T23:59:59.999-04:00").order_by("value_dt")
+TimezoneTest.objects.filter(value_dt__gte="2025-01-01T00:00:00-05:00", value_dt__lte="2025-03-31T23:59:59.999999-04:00").order_by("value_dt")
 # <QuerySet [<TimezoneTest: start of Q1 2025 in NY>, <TimezoneTest: end of Q1 2025 in Tokyo>, <TimezoneTest: end of Q1 2025 in Rome>, <TimezoneTest: end of Q1 2025 in NY>]>
 ```
 
@@ -315,7 +308,6 @@ Example API requests to create records:
 curl -X GET "http://localhost:8001/api/timezone-tests/?value_dt__gte=2025-01-01&value_dt__lte=2025-04-01&ordering=value_dt"
 ```
 
-
 ## Custom HTTP Header
 
 Create a Django middleware to read the header and set the timezone for the request.
@@ -332,7 +324,6 @@ MIDDLEWARE = [
 ]
 ```
 
-
 Get the local timezone of the browser with JavaScript
 
 ```js
@@ -347,16 +338,14 @@ curl -X GET "http://localhost:8001/api/timezone-tests/?ordering=value_dt" \
     -H "X-Timezone: Europe/Rome"
 ```
 
-
 ```bash
 curl -X GET http://localhost:8001/api/timezone-tests/?value_dt__gte=2025-01-01&value_dt__lte=2025-04-01&ordering=value_dt \
     -H "X-Timezone: America/New_York"
 
 # or specify the timezone offset directly
 
-curl -X GET http://localhost:8001/api/timezone-tests/?value_dt__gte=2025-01-01T00:00:00.000-05:00&value_dt__lte=2025-03-31T23:59:59.999-04:00&ordering=value_dt
+curl -X GET http://localhost:8001/api/timezone-tests/?value_dt__gte=2025-01-01T00:00:00-05:00&value_dt__lte=2025-03-31T23:59:59.999999-04:00&ordering=value_dt
 ```
-
 
 ## Group By queries
 
@@ -368,6 +357,8 @@ curl -X GET http://localhost:8001/api/timezone-tests/group_by_year_and_quarter/ 
     -H "X-Timezone: Europe/Rome"
 
 curl -X GET http://localhost:8001/api/timezone-tests/group_by_year_and_quarter/ \
-    -H "X-Timezone: Asia/Tokyo"
+    -H "X-Timezone: Asia/Calcutta"
 
+curl -X GET http://localhost:8001/api/timezone-tests/group_by_year_and_quarter/ \
+    -H "X-Timezone: Asia/Tokyo"
 ```
