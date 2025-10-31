@@ -8,7 +8,12 @@ class TimezoneMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        # read the timezone name from a custom header (API requests)
         tzname = request.headers.get("X-Timezone")
+        if not tzname:
+            # fallback to reading the timezone name from a cookie (browser requests)
+            tzname = request.COOKIES.get("django_timezone")
+
         if tzname:
             try:
                 timezone.activate(zoneinfo.ZoneInfo(tzname))

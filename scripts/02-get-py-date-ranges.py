@@ -24,3 +24,6 @@ get_quarter_range_in_timezone(2025, 1, "Asia/Calcutta")
 # ("2025-01-01T00:00:00+05:30", "2025-03-31T23:59:59.999999+05:30")
 get_quarter_range_in_timezone(2025, 2, "Asia/Tokyo")
 # ("2025-04-01T00:00:00+09:00", "2025-06-30T23:59:59.999999+09:00")
+
+# Notice that the timezone offsets are different
+# for New York and Rome because of Daylight Saving Time changes in Q1.

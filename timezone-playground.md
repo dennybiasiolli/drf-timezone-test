@@ -137,7 +137,7 @@ Let's create a sample table to play with timezones:
 
 Let's say we have people in New York, Rome, Calcutta and Tokyo, and everyone wants to store the start and end of Q1 2025 in their local timezone.
 
-In a browser, using JavaScript and the `luxon` library, we can get the correct ISO string with timezone offset for each city like this:
+We can get the correct ISO string with timezone offset for each city like this:
 
 [source (py)](./scripts/02-get-py-date-ranges.py)
 [source (js)](./scripts/02-get-js-date-ranges.js)
@@ -247,7 +247,7 @@ Let's try with an example, similar to the one we created for PostgreSQL.
 
 [source](./scripts/04-django-bulk-create.py)
 
-Open http://localhost:8001/admin/timezone_test_app/timezonetest/
+Open http://localhost:8002/admin/timezone_test_app/timezonetest/
 
 Notice that the datetimes are displayed in the timezone specified in `TIME_ZONE` (UTC by default).
 
@@ -284,6 +284,13 @@ TimezoneTest.objects.filter(value_dt__gte="2025-01-01T00:00:00-05:00", value_dt_
 # <QuerySet [<TimezoneTest: start of Q1 2025 in NY>, <TimezoneTest: end of Q1 2025 in Tokyo>, <TimezoneTest: end of Q1 2025 in Rome>, <TimezoneTest: end of Q1 2025 in NY>]>
 ```
 
+## How to use browser timezone in Django?
+
+```js
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+document.cookie = "django_timezone=" + timezone;
+```
+
 ## django-rest-framework DateTimeField
 
 ```py
@@ -305,7 +312,7 @@ Example API requests to create records:
 
 ```bash
 # gets all records using the default timezone in settings.TIME_ZONE (UTC by default)\
-curl -X GET "http://localhost:8001/api/timezone-tests/?value_dt__gte=2025-01-01&value_dt__lte=2025-04-01&ordering=value_dt"
+curl -X GET "http://localhost:8002/api/timezone-tests/?value_dt__gte=2025-01-01&value_dt__lte=2025-04-01&ordering=value_dt"
 ```
 
 ## Custom HTTP Header
@@ -333,32 +340,37 @@ Intl.DateTimeFormat().resolvedOptions().timeZone;
 Send the value to the backend with a custom HTTP header
 
 ```bash
-curl -X GET "http://localhost:8001/api/timezone-tests/?ordering=value_dt" \
+curl -X GET "http://localhost:8002/api/timezone-tests/?ordering=value_dt" \
     -H "Content-Type: application/json" \
     -H "X-Timezone: Europe/Rome"
 ```
 
 ```bash
-curl -X GET http://localhost:8001/api/timezone-tests/?value_dt__gte=2025-01-01&value_dt__lte=2025-04-01&ordering=value_dt \
-    -H "X-Timezone: America/New_York"
+curl -X GET http://localhost:8002/api/timezone-tests/?value_dt__gte=2025-01-01&value_dt__lte=2025-04-01&ordering=value_dt \
+    -H "X-Timezone: America/New_York" \
+    --cookie "django_timezone=America/New_York"
 
 # or specify the timezone offset directly
 
-curl -X GET http://localhost:8001/api/timezone-tests/?value_dt__gte=2025-01-01T00:00:00-05:00&value_dt__lte=2025-03-31T23:59:59.999999-04:00&ordering=value_dt
+curl -X GET http://localhost:8002/api/timezone-tests/?value_dt__gte=2025-01-01T00:00:00-05:00&value_dt__lte=2025-03-31T23:59:59.999999-04:00&ordering=value_dt
 ```
 
 ## Group By queries
 
 ```bash
-curl -X GET http://localhost:8001/api/timezone-tests/group_by_year_and_quarter/ \
+curl -X GET http://localhost:8002/api/timezone-tests/group_by_year_and_quarter/ \
+    --cookie "django_timezone=America/New_York" \
     -H "X-Timezone: America/New_York"
 
-curl -X GET http://localhost:8001/api/timezone-tests/group_by_year_and_quarter/ \
+curl -X GET http://localhost:8002/api/timezone-tests/group_by_year_and_quarter/ \
+    --cookie "django_timezone=Europe/Rome" \
     -H "X-Timezone: Europe/Rome"
 
-curl -X GET http://localhost:8001/api/timezone-tests/group_by_year_and_quarter/ \
+curl -X GET http://localhost:8002/api/timezone-tests/group_by_year_and_quarter/ \
+    --cookie "django_timezone=Asia/Calcutta" \
     -H "X-Timezone: Asia/Calcutta"
 
-curl -X GET http://localhost:8001/api/timezone-tests/group_by_year_and_quarter/ \
+curl -X GET http://localhost:8002/api/timezone-tests/group_by_year_and_quarter/ \
+    --cookie "django_timezone=Asia/Tokyo" \
     -H "X-Timezone: Asia/Tokyo"
 ```

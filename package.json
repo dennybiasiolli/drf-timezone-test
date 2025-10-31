@@ -4,6 +4,9 @@
   "description": "Add your description here",
   "author": "Denny Biasiolli",
   "license": "ISC",
+  "scripts": {
+    "format": "prettier . --write"
+  },
   "dependencies": {
     "luxon": "^3.7.2"
   },
