@@ -1,0 +1,12 @@
+{% extends "rest_framework/api.html" %}
+
+{% block script %}
+{{ block.super }}
+<script>
+    // get the user's timezone
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.info("Detected timezone:", tz);
+    // set timezone in a cookie
+    // document.cookie = "django_timezone=" + tz;
+</script>
+{% endblock script %}
