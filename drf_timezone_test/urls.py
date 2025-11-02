@@ -22,4 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("api/", include("timezone_test_app.urls")),
+    path("silk/", include("silk.urls", namespace="silk")),
 ]
