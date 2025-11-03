@@ -11,7 +11,7 @@ class TimezoneMiddleware:
         # read the timezone name from a custom header (API requests)
         tzname = request.headers.get("X-Timezone")
         if not tzname:
-            # fallback to reading the timezone name from a cookie (browser requests)
+            # fallback to cookie (web requests)
             tzname = request.COOKIES.get("django_timezone")
 
         if tzname:

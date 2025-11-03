@@ -69,25 +69,20 @@ app = FastAPI(lifespan=lifespan)
 
 @app.middleware("http")
 async def check_timezone_header_or_cookie(request: Request, call_next):
-    tz_header = request.headers.get("X-Timezone")
-    tz_cookie = request.cookies.get("fastapi_timezone")
+    # read the timezone name from a custom header (API requests)
+    tzname = request.headers.get("X-Timezone")
+    if not tzname:
+        # fallback to cookie (web requests)
+        tzname = request.cookies.get("fastapi_timezone")
 
-    tz = "UTC"  # default timezone
-    if tz_header:
-        tz = tz_header
-    elif tz_cookie:
-        tz = tz_cookie
-
-    # check timezone validity
-    try:
-        zoneinfo.ZoneInfo(tz)
-    except zoneinfo.ZoneInfoNotFoundError:
-        tz = "UTC"
-
-    request.state.tz = tz
-
-    response = await call_next(request)
-    return response
+    if tzname:
+        try:
+            request.state.tz = zoneinfo.ZoneInfo(tzname)
+        except zoneinfo.ZoneInfoNotFoundError:
+            request.state.tz = zoneinfo.ZoneInfo("UTC")
+    else:
+        request.state.tz = zoneinfo.ZoneInfo("UTC")
+    return await call_next(request)
 
 
 @app.post("/api/timezone-tests/", response_model=TimezoneTestPublic)
@@ -106,8 +101,6 @@ async def read_timezones(
     value_dt__gte: Annotated[datetime | None, Query(example="2025-01-01")] = None,
     value_dt__lt: Annotated[datetime | None, Query(example="2025-04-01")] = None,
 ):
-    tz = zoneinfo.ZoneInfo(request.state.tz)
-
     results = session.exec(
         select(TimezoneTest)
         .where(
@@ -130,5 +123,5 @@ async def read_timezones(
 
     # Convert value_dt to the requested timezone
     for result in results:
-        result.value_dt = result.value_dt.astimezone(tz)
+        result.value_dt = result.value_dt.astimezone(request.state.tz)
     return results
