@@ -35,11 +35,11 @@ wheels = [
 
 [[package]]
 name = "asgiref"
-version = "3.9.2"
+version = "3.10.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/7f/bf/0f3ecda32f1cb3bf1dca480aca08a7a8a3bdc4bed2343a103f30731565c9/asgiref-3.9.2.tar.gz", hash = "sha256:a0249afacb66688ef258ffe503528360443e2b9a8d8c4581b6ebefa58c841ef1", size = 36894, upload-time = "2025-09-23T15:00:55.136Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/46/08/4dfec9b90758a59acc6be32ac82e98d1fbfc321cb5cfa410436dbacf821c/asgiref-3.10.0.tar.gz", hash = "sha256:d89f2d8cd8b56dada7d52fa7dc8075baa08fb836560710d38c292a7a3f78c04e", size = 37483, upload-time = "2025-10-05T09:15:06.557Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c7/d1/69d02ce34caddb0a7ae088b84c356a625a93cd4ff57b2f97644c03fad905/asgiref-3.9.2-py3-none-any.whl", hash = "sha256:0b61526596219d70396548fc003635056856dba5d0d086f86476f10b33c75960", size = 23788, upload-time = "2025-09-23T15:00:53.627Z" },
+    { url = "https://files.pythonhosted.org/packages/17/9c/fc2331f538fbf7eedba64b2052e99ccf9ba9d6888e2f41441ee28847004b/asgiref-3.10.0-py3-none-any.whl", hash = "sha256:aef8a81283a34d0ab31630c9b7dfe70c812c95eba78171367ca8745e88124734", size = 24050, upload-time = "2025-10-05T09:15:05.11Z" },
 ]
 
 [[package]]
@@ -95,16 +95,16 @@ wheels = [
 
 [[package]]
 name = "django"
-version = "5.2.6"
+version = "5.2.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asgiref" },
     { name = "sqlparse" },
     { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4c/8c/2a21594337250a171d45dda926caa96309d5136becd1f48017247f9cdea0/django-5.2.6.tar.gz", hash = "sha256:da5e00372763193d73cecbf71084a3848458cecf4cee36b9a1e8d318d114a87b", size = 10858861, upload-time = "2025-09-03T13:04:03.23Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b1/96/bd84e2bb997994de8bcda47ae4560991084e86536541d7214393880f01a8/django-5.2.7.tar.gz", hash = "sha256:e0f6f12e2551b1716a95a63a1366ca91bbcd7be059862c1b18f989b1da356cdd", size = 10865812, upload-time = "2025-10-01T14:22:12.081Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f5/af/6593f6d21404e842007b40fdeb81e73c20b6649b82d020bb0801b270174c/django-5.2.6-py3-none-any.whl", hash = "sha256:60549579b1174a304b77e24a93d8d9fafe6b6c03ac16311f3e25918ea5a20058", size = 8303111, upload-time = "2025-09-03T13:03:47.808Z" },
+    { url = "https://files.pythonhosted.org/packages/8f/ef/81f3372b5dd35d8d354321155d1a38894b2b766f576d0abffac4d8ae78d9/django-5.2.7-py3-none-any.whl", hash = "sha256:59a13a6515f787dec9d97a0438cd2efac78c8aca1c80025244b0fe507fe0754b", size = 8307145, upload-time = "2025-10-01T14:22:49.476Z" },
 ]
 
 [[package]]
@@ -118,15 +118,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/2c/e4/465d2699cd388c000
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c1/40/6a02495c5658beb1f31eb09952d8aa12ef3c2a66342331ce3a35f7132439/django_filter-25.2-py3-none-any.whl", hash = "sha256:9c0f8609057309bba611062fe1b720b4a873652541192d232dd28970383633e3", size = 94145, upload-time = "2025-10-05T09:51:29.728Z" },
 ]
-
-[[package]]
-name = "django-rest-framework"
-version = "0.1.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "djangorestframework" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/ed/d2/61159bc6efd1bf16adc4a2a48f7ace2080d1f7aef054f606d1857cab490c/django-rest-framework-0.1.0.tar.gz", hash = "sha256:47a8f496fa69e3b6bd79f68dd7a1527d907d6b77f009e9db7cf9bb21cc565e4a", size = 969, upload-time = "2017-07-20T17:14:33.345Z" }
 
 [[package]]
 name = "django-silk"
@@ -168,11 +159,6 @@ name = "drf-timezone-test"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "django" },
-    { name = "django-filter" },
-    { name = "django-rest-framework" },
-    { name = "django-silk" },
-    { name = "djangorestframework" },
     { name = "psycopg" },
     { name = "tzlocal" },
 ]
@@ -180,6 +166,12 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "black" },
+]
+django = [
+    { name = "django" },
+    { name = "django-filter" },
+    { name = "django-silk" },
+    { name = "djangorestframework" },
 ]
 fastapi = [
     { name = "fastapi", extra = ["standard"] },
@@ -189,17 +181,18 @@ fastapi = [
 
 [package.metadata]
 requires-dist = [
-    { name = "django", specifier = ">=5.2.6" },
-    { name = "django-filter", specifier = ">=25.2" },
-    { name = "django-rest-framework", specifier = ">=0.1.0" },
-    { name = "django-silk", specifier = ">=5.4.3" },
-    { name = "djangorestframework", specifier = ">=3.16.1" },
     { name = "psycopg", specifier = ">=3.2.10" },
     { name = "tzlocal", specifier = ">=5.3.1" },
 ]
 
 [package.metadata.requires-dev]
 dev = [{ name = "black", specifier = ">=25.9.0" }]
+django = [
+    { name = "django", specifier = ">=5.2.7" },
+    { name = "django-filter", specifier = ">=25.2" },
+    { name = "django-silk", specifier = ">=5.4.3" },
+    { name = "djangorestframework", specifier = ">=3.16.1" },
+]
 fastapi = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.120.4" },
     { name = "python-dotenv", specifier = ">=1.2.1" },

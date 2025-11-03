@@ -1,5 +1,5 @@
 requirements:
-	uv sync --dev
+	uv sync --all-groups
 
 style-fix:
 	uv run black .
