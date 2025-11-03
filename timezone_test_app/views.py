@@ -1,4 +1,4 @@
-from django.db.models.functions import ExtractDay, ExtractQuarter, ExtractYear
+from django.db.models.functions import ExtractQuarter, ExtractYear
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
