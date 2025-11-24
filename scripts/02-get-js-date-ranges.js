@@ -17,11 +17,15 @@ function quarterRangeInTimezone(year, quarter, timezone) {
   return [startOfQuarter.toISO(), endOfQuarter.toISO()];
 }
 
+quarterRangeInTimezone(2025, 1, "America/Los_Angeles");
+// [ "2025-01-01T00:00:00.000-08:00", "2025-03-31T23:59:59.999-07:00" ]
 quarterRangeInTimezone(2025, 1, "America/New_York");
 // [ "2025-01-01T00:00:00.000-05:00", "2025-03-31T23:59:59.999-04:00" ]
+quarterRangeInTimezone(2025, 1, "Europe/London");
+// [ "2025-01-01T00:00:00.000+00:00", "2025-03-31T23:59:59.999+01:00" ]
 quarterRangeInTimezone(2025, 1, "Europe/Rome");
-// [ "2025-01-01T00:00:00.000+01:00", "2025-03-31T23:59:59.999+02:00" ]
-quarterRangeInTimezone(2025, 1, "Asia/Calcutta"); // India Standard Time (IST)
 // [ "2025-01-01T00:00:00.000+05:30", "2025-03-31T23:59:59.999+05:30" ]
 quarterRangeInTimezone(2025, 1, "Asia/Tokyo");
 // [ "2025-01-01T00:00:00.000+09:00", "2025-03-31T23:59:59.999+09:00" ]
+quarterRangeInTimezone(2025, 1, "Australia/Sydney");
+// [ "2025-01-01T00:00:00.000+11:00", "2025-03-31T23:59:59.999+11:00" ]
